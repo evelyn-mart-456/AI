@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #19d7f8, #fd00da);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .study-tool {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="study-tool">
+  <h2>AI Study Tool</h2>
+
+  <textarea id="notes" placeholder="Paste your notes here..." rows="8" cols="50"></textarea>
+  <br><br>
+
+  <button onclick="generateStudy()">Generate Study Material</button>
+
+  <h3>Summary:</h3>
+  <p id="summary"></p>
+
+  <h3>Quiz Questions:</h3>
+  <ul id="quiz"></ul>
+</div>
+
+<script>
+async function generateStudy() {
+    const notes = document.getElementById("notes").value;
+
+    if (!notes) {
+        alert("Please enter some notes");
+        return;
+    }
+
+    const response = await fetch("/generate-study", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ notes })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("summary").innerText = data.summary;
+
+    const quizList = document.getElementById("quiz");
+    quizList.innerHTML = "";
+
+    data.questions.forEach(q => {
+        const li = document.createElement("li");
+        li.innerText = q;
+        quizList.appendChild(li);
+    });
+}
+</script>
+
+</body>
+</html>
