@@ -13,7 +13,8 @@ app.post("/generate-study", (req, res) => {
     try {
         console.log("Request received:", req.body);
 
-        const { notes } = req.body;
+        const { text } = req.body;
+           const notes = text;
 
         if (!notes) {
             return res.json({
