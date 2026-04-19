@@ -53,7 +53,7 @@ async function generateStudy() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ notes })
+        body: JSON.stringify({ text: notes })
     });
 
     const data = await response.json();
