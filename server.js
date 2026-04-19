@@ -1,17 +1,13 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use(cors({
-    origin: "https://evelyn-mart-456.github.io"
-}));
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
+app.use(cors()); // allow all origins for now (debug mode)
 
 app.post("/generate-study", (req, res) => {
     try {
@@ -37,16 +33,14 @@ app.post("/generate-study", (req, res) => {
         return res.json({ summary, questions });
 
     } catch (err) {
-        console.error("ERROR:", err);
-
-        // NEVER crash the response
+        console.error(err);
         return res.json({
-            summary: "Server error (check backend)",
+            summary: "Server error",
             questions: []
         });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log("Server running on port", PORT);
 });
